@@ -1,7 +1,7 @@
 {
     "name": "danielboendergaard/phantom-pdf",
     "description": "A Package for generating PDF files using PhantomJS",
-    "keywords": ["pdf", "html", "laravel"],
+    "keywords": ["pdf", "html", "laravel", "lumen"],
     "license": "MIT",
     "authors": [
         {
