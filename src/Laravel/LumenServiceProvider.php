@@ -1,40 +1,37 @@
 <?php
+
 namespace PhantomPdf\Laravel;
 
 use PhantomPdf\PdfGenerator;
-use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class LumenServiceProvider extends BaseServiceProvider
+class LumenServiceProvider extends ServiceProvider
 
 {
-    public function register()
-    {
-        $this->app->configure('phantom-pdf');
-
-        $configPath = __DIR__.'/../config/config.php';
-        $this->mergeConfigFrom($configPath, 'phantom-pdf');
-    }
-
     /**
      * Register the service provider.
      *
      * @return void
      */
+    public function register()
+    {
+        $this->app->configure('phantom-pdf');
+        $configPath = __DIR__.'/../config/config.php';
+        $this->mergeConfigFrom($configPath, 'phantom-pdf');
+    }
+
+
     public function boot()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'phantom-pdf');
+        $configPath = __DIR__.'/../config/config.php';
+        $this->mergeConfigFrom($configPath, 'phantom-pdf');
 
         $this->app->singleton('phantom-pdf', function () {
             $generator = new PdfGenerator;
-
             $generator->setBaseUrl($this->app['config']['phantom-pdf.base_url'] ?: url('/'));
-
             $generator->setBinaryPath($this->app['config']['phantom-pdf.binary_path']);
-
             $generator->setStoragePath($this->app['config']['phantom-pdf.temporary_file_path']);
-
             $generator->setTimeout($this->app['config']['phantom-pdf.timeout']);
-
             foreach ($this->app['config']['phantom-pdf.command_line_options'] as $option) {
                 $generator->addCommandLineOption($option);
             }
